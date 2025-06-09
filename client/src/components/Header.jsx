@@ -14,15 +14,24 @@ export default function Header() {
   return (
     <header className="header">
       <nav>
-        <Link to="/election">Election</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        {user?.role === 'admin' && (
-          <Link to="/admin">Admin</Link>
+        {user ? (
+          <>
+            <Link to="/election">Election</Link>
+            <Link to="/dashboard">Dashboard</Link>
+            {user.role === 'admin' && <Link to="/admin">Admin</Link>}
+          </>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
         )}
       </nav>
-      <button onClick={handleLogout} className="button logout-button">
-        Logout
-      </button>
+      {user && (
+        <button onClick={handleLogout} className="button logout-button">
+          Logout
+        </button>
+      )}
     </header>
   );
 }
