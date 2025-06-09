@@ -22,8 +22,9 @@ export default function BuildPage() {
         // filter cities for this country
         setTypes(btRes.data);
         setCities(cityRes.data.filter(c => c.country._id === countryId));
-      } catch {
-        setError('Failed to load build data');
+      } catch (e) {
+        console.error(e);
+        setError(e.response?.data?.error || 'Failed to load build data');
       }
     }
     if (countryId) load();

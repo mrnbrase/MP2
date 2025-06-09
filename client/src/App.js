@@ -7,6 +7,7 @@ import SignupPage       from './pages/SignupPage';
 import CountrySelect    from './pages/CountrySelect';
 import ElectionPage     from './pages/ElectionPage';
 import AdminPage        from './pages/AdminPage';
+import Header           from './components/Header';
 import StatsPage        from './pages/StatsPage';
 
 import DashboardLayout  from './components/DashboardLayout';
@@ -19,6 +20,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Header />
         <Routes>
           <Route path="/login"           element={<LoginPage />} />
           <Route path="/signup"          element={<SignupPage />} />
