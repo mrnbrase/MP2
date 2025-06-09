@@ -12,18 +12,15 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md">
-      <nav className="space-x-4">
-        <Link to="/election" className="hover:underline">Election</Link>
-        <Link to="/dashboard" className="hover:underline">Dashboard</Link>
+    <header className="header">
+      <nav>
+        <Link to="/election">Election</Link>
+        <Link to="/dashboard">Dashboard</Link>
         {user?.role === 'admin' && (
-          <Link to="/admin" className="hover:underline">Admin</Link>
+          <Link to="/admin">Admin</Link>
         )}
       </nav>
-      <button
-        onClick={handleLogout}
-        className="bg-red-600 px-3 py-1 rounded hover:bg-red-700"
-      >
+      <button onClick={handleLogout} className="button logout-button">
         Logout
       </button>
     </header>
