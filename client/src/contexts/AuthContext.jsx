@@ -38,7 +38,12 @@ export function AuthProvider({ children }) {
     setUser(me.data);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await client.post('/auth/logout');
+    } catch {
+      // ignore errors
+    }
     localStorage.removeItem('token');
     setUser(null);
   };

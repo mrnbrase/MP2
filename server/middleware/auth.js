@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { blacklist } = require('../utils/tokenBlacklist');
 
 module.exports = async function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -7,6 +8,8 @@ module.exports = async function authenticate(req, res, next) {
     return res.status(401).json({ error: 'Missing or malformed token' });
 
   const token = authHeader.split(' ')[1];
+  if (blacklist.has(token))
+    return res.status(401).json({ error: 'Token has been logged out' });
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     // Attach user info to the request

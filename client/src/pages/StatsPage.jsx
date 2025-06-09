@@ -10,7 +10,7 @@ export default function StatsPage() {
   useEffect(() => {
     async function loadStats() {
       try {
-        const { data } = await client.get(`/dashboard/${user.country}`);
+        const { data } = await client.get(`/dashboard/${user.country}/overview`);
         setStats(data);
       } catch {
         setError('Failed to load country stats');
@@ -24,7 +24,7 @@ export default function StatsPage() {
 
   return (
     <div className="p-4 max-w-3xl mx-auto space-y-6">
-      <h2 className="text-2xl">Stats for {stats.countryName}</h2>
+      <h2 className="text-2xl">Stats for {user.country}</h2>
 
       {/* Resources */}
       <section className="bg-white shadow rounded p-4">

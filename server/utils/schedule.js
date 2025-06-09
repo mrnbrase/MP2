@@ -10,6 +10,18 @@ const Event    = require('../models/Event');
 const Resource = require('../models/Resource');
 const UnitType = require('../models/UnitType');
 
+/** Increment resources for each country every minute */
+function scheduleResourceGeneration() {
+  cron.schedule('* * * * *', async () => {
+    const resources = await Resource.find();
+    for (const r of resources) {
+      r.moneyCents += r.moneyCentsPerSecond * 60;
+      r.oilUnits   += r.oilUnitsPerSecond * 60;
+      await r.save();
+    }
+  });
+}
+
 /**
  * Schedule a daily job at 00:00 UTC that:
  * 1. On Mondays, creates next week's elections
@@ -143,6 +155,7 @@ async function resolveEvents() {
 
 module.exports = {
   scheduleWeeklyElections,
+  scheduleResourceGeneration,
   resolveLastWeekElection,
   resolveEvents
 };

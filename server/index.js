@@ -3,7 +3,7 @@ const express  = require('express');
 const mongoose = require('mongoose');
 const cors     = require('cors');
 
-const { scheduleWeeklyElections } = require('./utils/schedule');
+const { scheduleWeeklyElections, scheduleResourceGeneration } = require('./utils/schedule');
 
 const authRoutes      = require('./routes/auth');
 const countryRoutes   = require('./routes/countries');
@@ -48,6 +48,7 @@ mongoose
   .then(() => {
     console.log('✅ MongoDB connected');
     scheduleWeeklyElections();
+    scheduleResourceGeneration();
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })

@@ -56,10 +56,10 @@ router.post(
         return res.status(404).json({ error: 'Unit type or resources not found' });
       }
       const totalCost = unit.costCents * quantity;
-      if (resrc.moneyCentsPerSecond < totalCost) {
+      if (resrc.moneyCents < totalCost) {
         return res.status(400).json({ error: 'Insufficient funds' });
       }
-      resrc.moneyCentsPerSecond -= totalCost;
+      resrc.moneyCents -= totalCost;
       await resrc.save();
       const now = new Date();
       const travelTimeMs = Math.ceil((quantity * 1000) / unit.speed);
@@ -110,10 +110,10 @@ router.post(
       if (!resrc) {
         return res.status(404).json({ error: 'Resources not found' });
       }
-      if (resrc.moneyCentsPerSecond < costCents) {
+      if (resrc.moneyCents < costCents) {
         return res.status(400).json({ error: 'Insufficient funds' });
       }
-      resrc.moneyCentsPerSecond -= costCents;
+      resrc.moneyCents         -= costCents;
       resrc.moneyCentsPerSecond += moneyCentsPerSecondDelta;
       resrc.oilUnitsPerSecond   += oilUnitsPerSecondDelta;
       await resrc.save();
@@ -308,10 +308,10 @@ router.post(
 
       // resource check & deduction
       const resrc = await Resource.findOne({ country: countryId });
-      if (resrc.moneyCentsPerSecond < bType.costCents) {
+      if (resrc.moneyCents < bType.costCents) {
         return res.status(400).json({ error: 'Insufficient funds' });
       }
-      resrc.moneyCentsPerSecond -= bType.costCents;
+      resrc.moneyCents -= bType.costCents;
       await resrc.save();
 
       // lookup city for location
