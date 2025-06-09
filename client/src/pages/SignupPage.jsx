@@ -21,14 +21,14 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h2 className="text-xl mb-4">Sign Up</h2>
-      {error && <div className="text-red-600 mb-2">{error}</div>}
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <div className="form-container">
+      <h2>Sign Up</h2>
+      {error && <div className="error">{error}</div>}
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-2 border"
+          className="input"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
@@ -36,7 +36,7 @@ export default function SignupPage() {
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-2 border"
+          className="input"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
@@ -44,12 +44,12 @@ export default function SignupPage() {
         <input
           type="text"
           placeholder="Country Code (e.g. SA)"
-          className="w-full p-2 border"
+          className="input"
           value={country}
           onChange={e => setCountry(e.target.value)}
           required
         />
-        <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded">
+        <button type="submit" className="button full-width" style={{marginTop:'1rem'}}>
           Sign Up
         </button>
       </form>
