@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
+import client from '../api/client';
 
 export default function MapView({ countryId, pendingEvents }) {
   const [geojson, setGeojson] = useState(null);
@@ -8,9 +9,8 @@ export default function MapView({ countryId, pendingEvents }) {
     // Fetch the country’s GeoJSON once
     async function loadGeo() {
       try {
-        const res = await fetch(`/api/countries/${countryId}`);
-        const country = await res.json();
-        setGeojson(country.geojson);
+        const { data } = await client.get(`/countries/${countryId}`);
+        setGeojson(data.geojson);
       } catch (err) {
         console.error('Failed to load country geometry', err);
       }

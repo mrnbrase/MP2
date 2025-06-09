@@ -282,66 +282,6 @@ router.get(
   }
 );
 
-// POST /api/dashboard/:countryId/build
-router.post(
-  '/:countryId/build',
-  authenticate,
-  async (req, res, next) => {
-    try {
-      const countryId = req.params.countryId;
-      const { buildingTypeId } = req.body;
-
-      // only president can build
-      if (
-        req.user.role !== 'president' ||
-        req.user.country.toString() !== countryId
-      ) {
-        return res.status(403).json({ error: 'Only the president can build' });
-      }
-
-      const bType = await BuildingType.findById(buildingTypeId);
-      if (!bType) {
-        return res.status(404).json({ error: 'Building type not found' });
-      }
-
-      // load country to check land
-      const country = await Country.findById(countryId);
-      if (country.usedLand + bType.landUsage > country.landLimit) {
-        return res.status(400).json({ error: 'Not enough land available' });
-      }
-
-      // load & check resources
-      const resrc = await Resource.findOne({ country: countryId });
-      if (resrc.moneyCentsPerSecond < bType.costCents) {
-        return res.status(400).json({ error: 'Insufficient funds' });
-      }
-
-      // deduct cost immediately
-      resrc.moneyCentsPerSecond -= bType.costCents;
-      await resrc.save();
-
-      // schedule a build event that when resolved will increase land usage & output
-      const now = new Date();
-      // e.g. buildTime = 1 minute per land unit
-      const buildTimeMs = bType.landUsage * 60 * 1000;
-      const completesAt = new Date(now.getTime() + buildTimeMs);
-
-      const ev = await Event.create({
-        type: 'build',
-        fromCountry: countryId,
-        buildingType: buildingTypeId,
-        sentAt: now,
-        arrivesAt: completesAt,
-        resolved: false
-      });
-
-      res.status(201).json(ev);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
 router.post(
   '/:countryId/build',
   authenticate,
