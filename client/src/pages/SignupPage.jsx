@@ -1,14 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function SignupPage() {
-  const { signup } = useContext(AuthContext);
+  const { user, signup } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [country, setCountry] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!user) return;
+    if (user.role === 'president') navigate('/dashboard', { replace: true });
+    else navigate('/election', { replace: true });
+  }, [user, navigate]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -53,6 +59,10 @@ export default function SignupPage() {
           Sign Up
         </button>
       </form>
+      <p className="text-center mt-2 text-sm">
+        Already have an account?{' '}
+        <Link to="/login" className="text-blue-600">Log In</Link>
+      </p>
     </div>
   );
 }
