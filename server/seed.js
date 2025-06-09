@@ -34,6 +34,8 @@ async function runSeed() {
       {
         $setOnInsert: {
           country:             c._id,
+          moneyCents:          0,
+          oilUnits:            0,
           moneyCentsPerSecond: 277,   // $2.77/sec ≈ $10000/hr
           oilUnitsPerSecond:   1
         }

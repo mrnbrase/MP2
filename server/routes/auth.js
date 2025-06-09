@@ -4,6 +4,7 @@ const router       = require('express').Router();
 const User         = require('../models/User');
 const jwt          = require('jsonwebtoken');
 const authenticate = require('../middleware/auth');
+const { blacklist } = require('../utils/tokenBlacklist');
 
 // POST /api/auth/signup
 router.post('/signup', async (req, res, next) => {
@@ -41,6 +42,13 @@ router.post('/login', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+// POST /api/auth/logout
+router.post('/logout', authenticate, (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  blacklist.add(token);
+  res.json({ message: 'Logged out' });
 });
 
 // GET /api/auth/me

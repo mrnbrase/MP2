@@ -44,6 +44,8 @@ router.post(
           {
             $setOnInsert: {
               country:            c._id,
+              moneyCents:         0,
+              oilUnits:           0,
               moneyCentsPerSecond: 277,  // $2.77/sec ≈ $10k/hr
               oilUnitsPerSecond:  1
             }
