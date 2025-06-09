@@ -27,8 +27,8 @@ export default function MapView({ countryId, pendingEvents }) {
     : [0, 0];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <MapContainer center={center} zoom={5} style={{ height: '100%', width: '100%' }}>
+    <div className="map-wrapper">
+      <MapContainer center={center} zoom={5} className="map">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="© OpenStreetMap contributors"
