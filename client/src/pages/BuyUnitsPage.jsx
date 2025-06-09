@@ -19,8 +19,9 @@ export default function BuyUnitsPage() {
       try {
         const res = await client.get(`/dashboard/${countryId}/unit-types`);
         setUnits(res.data);
-      } catch {
-        setError('Failed to load unit types');
+      } catch (e) {
+        console.error(e);
+        setError(e.response?.data?.error || 'Failed to load unit types');
       }
     }
     if (countryId) loadUnitTypes();

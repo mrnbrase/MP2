@@ -26,8 +26,9 @@ export default function SendUnitsPage() {
         setInventory(invRes.data);
         // exclude own country
         setCountries(ctrRes.data.filter(c => c._id !== cid));
-      } catch {
-        setError('Failed to load inventory or countries');
+      } catch (e) {
+        console.error(e);
+        setError(e.response?.data?.error || 'Failed to load inventory or countries');
       }
     }
     load();
