@@ -18,6 +18,7 @@ export default function Header() {
           <>
             <Link to="/election">Election</Link>
             <Link to="/dashboard">Dashboard</Link>
+            <Link to="/diplomacy">Diplomacy</Link> {/* Added Diplomacy Link */}
             {user.role === 'admin' && <Link to="/admin">Admin</Link>}
           </>
         ) : (

@@ -11,14 +11,19 @@ MP2 is an experimental multiplayer strategy game built with a MERN stack. The pr
 - Events for attacking, spying and nuking other countries.
 - Cron job to resolve weekly elections and pending events automatically.
 - React front end with pages for login, signup, dashboard, building and buying units, and more.
+- **Diplomacy System:** Allows countries to form alliances, declare war, make non-aggression pacts, and trade agreements through presidential actions. Includes a dedicated frontend page for managing diplomatic relations.
+- **Enhanced Admin City Management:** Admins can now edit and delete cities through the admin panel.
+- **Toast Notifications:** Implemented for improved user feedback on various actions across the application.
 - Admin routes to seed initial data and manage gameplay.
 
 ## Tech Stack
 
 - **Server**: Node.js, Express, Mongoose and MongoDB
-- **Client**: React (Create React App)
+- **Client**: React (Create React App), react-hot-toast
 - **Auth**: JSON Web Tokens
 - **Background jobs**: node-cron
+- **Server-side Testing**: Jest, Supertest, @shelf/jest-mongodb
+- **Client-side Testing**: Jest, React Testing Library (via Create React App)
 
 ## Development
 
@@ -64,7 +69,19 @@ The client will be available at [http://localhost:3000](http://localhost:3000) a
 
 ### Testing
 
-`npm test` is currently a placeholder; there are no automated tests yet.
+Automated tests have been implemented for both backend and frontend components.
+
+-   **Backend Testing:**
+    *   Tests are written using Jest and Supertest, with an in-memory MongoDB instance managed by `@shelf/jest-mongodb`.
+    *   Focuses on API route validation and behavior, particularly for new features like the Diplomacy API.
+    *   Run backend tests with `npm test` in the `server` directory.
+    *   Example test file: `server/routes/diplomacy.test.js`.
+
+-   **Frontend Testing:**
+    *   Tests use Jest and React Testing Library, as configured by Create React App.
+    *   Focuses on component rendering, user interaction, and state changes, especially for pages with new functionality like `DiplomacyPage.jsx`.
+    *   Run frontend tests with `npm test` in the `client` directory.
+    *   Example test file: `client/src/pages/DiplomacyPage.test.jsx`.
 
 ## License
 

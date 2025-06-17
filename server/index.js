@@ -13,6 +13,7 @@ const adminRoutes     = require('./routes/admin');
 const unitTypeRoutes  = require('./routes/unitTypes');
 const resourceRoutes  = require('./routes/resources');
 const usersRoutes = require('./routes/users');
+const diplomacyRoutes = require('./routes/diplomacy');
 
 const authenticate = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
@@ -34,6 +35,7 @@ app.use('/api/admin',       authenticate, adminRoutes);
 app.use('/api/unit-types',  authenticate, unitTypeRoutes);
 app.use('/api/resources',   authenticate, resourceRoutes);
 app.use('/api/users', authenticate, usersRoutes);
+app.use('/api/diplomacy', authenticate, diplomacyRoutes);
 
 // ——— GLOBAL ERROR HANDLER ————————————————————————
 app.use(errorHandler);
@@ -53,3 +55,5 @@ mongoose
     app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => console.error('❌ MongoDB connection error:', err));
+
+module.exports = app; // Export the app for testing
