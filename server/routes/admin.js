@@ -65,6 +65,36 @@ router.post(
   }
 );
 
+// DELETE an existing city
+router.delete(
+  '/cities/:cityId',
+  authenticate,
+  async (req, res, next) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin only' });
+      }
+
+      const { cityId } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(cityId)) {
+        return res.status(400).json({ error: 'Invalid city ID' });
+      }
+
+      const city = await City.findById(cityId);
+      if (!city) {
+        return res.status(404).json({ error: 'City not found' });
+      }
+
+      await City.findByIdAndDelete(cityId);
+
+      res.json({ message: 'City deleted successfully' });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 // POST /api/admin/ban/:id
 router.post(
   '/ban/:id',
@@ -237,4 +267,56 @@ router.post(
     }
   }
 );
+
+// PUT update an existing city
+router.put(
+  '/cities/:cityId',
+  authenticate,
+  async (req, res, next) => {
+    try {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admin only' });
+      }
+
+      const { cityId } = req.params;
+      const { name, lat, lng, country: countryId } = req.body;
+
+      if (!mongoose.Types.ObjectId.isValid(cityId)) {
+        return res.status(400).json({ error: 'Invalid city ID' });
+      }
+
+      let city = await City.findById(cityId);
+      if (!city) {
+        return res.status(404).json({ error: 'City not found' });
+      }
+
+      // Validate country if it's being changed
+      if (countryId && city.country.toString() !== countryId) {
+        if (!mongoose.Types.ObjectId.isValid(countryId)) {
+          return res.status(400).json({ error: 'Invalid country ID' });
+        }
+        const countryExists = await Country.findById(countryId);
+        if (!countryExists) {
+          return res.status(404).json({ error: 'New country not found' });
+        }
+        city.country = countryId;
+      }
+
+      // Update fields
+      if (name) city.name = name;
+      if (lat !== undefined) city.location.lat = lat;
+      if (lng !== undefined) city.location.lng = lng;
+
+      await city.save();
+
+      // Populate country for the response
+      city = await City.findById(cityId).populate('country', 'name');
+
+      res.json(city);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 module.exports = router;

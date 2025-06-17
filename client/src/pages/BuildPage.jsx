@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import client from '../api/client';
 import { AuthContext } from '../contexts/AuthContext';
+import toast from 'react-hot-toast'; // Import toast
 
 export default function BuildPage() {
   const { user } = useContext(AuthContext);
@@ -9,8 +10,8 @@ export default function BuildPage() {
   const [types, setTypes]   = useState([]);
   const [cities, setCities] = useState([]);
   const [form, setForm]     = useState({ buildingTypeId:'', cityId:'' });
-  const [error, setError]   = useState('');
-  const [msg, setMsg]       = useState('');
+  // const [error, setError]   = useState(''); // Replaced by toast
+  // const [msg, setMsg]       = useState(''); // Replaced by toast
 
   useEffect(() => {
     async function load() {
@@ -24,7 +25,7 @@ export default function BuildPage() {
         setCities(cityRes.data.filter(c => c.country._id === countryId));
       } catch (e) {
         console.error(e);
-        setError(e.response?.data?.error || 'Failed to load build data');
+        toast.error(e.response?.data?.error || 'Failed to load build data');
       }
     }
     if (countryId) load();
@@ -32,30 +33,35 @@ export default function BuildPage() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError(''); setMsg('');
+    // setError(''); setMsg(''); // No longer needed
+    if (!form.buildingTypeId || !form.cityId) {
+      toast.error('Please select both a building and a city.');
+      return;
+    }
     try {
       await client.post(`/dashboard/${countryId}/build`, {
         buildingTypeId: form.buildingTypeId,
         cityId: form.cityId
       });
-      setMsg('Build order placed!');
+      toast.success('Build order placed successfully!');
+      setForm({ buildingTypeId: '', cityId: '' }); // Reset form
     } catch (err) {
-      setError(err.response?.data?.error || 'Build failed');
+      toast.error(err.response?.data?.error || 'Build failed');
     }
   };
 
   return (
     <div className="max-w-md mx-auto bg-white shadow rounded p-6">
       <h2 className="text-2xl mb-4">Build Structures</h2>
-      {error && <div className="text-red-600 mb-2">{error}</div>}
-      {msg   && <div className="text-green-600 mb-2">{msg}</div>}
+      {/* {error && <div className="text-red-600 mb-2">{error}</div>} */} {/* Replaced by toast */}
+      {/* {msg   && <div className="text-green-600 mb-2">{msg}</div>} */} {/* Replaced by toast */}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           value={form.buildingTypeId}
           onChange={e => setForm({ ...form, buildingTypeId: e.target.value })}
           className="w-full p-2 border rounded"
-          required
+          // required // Custom toast handles validation
         >
           <option value="">Select Building</option>
           {types.map(b => (
@@ -69,7 +75,7 @@ export default function BuildPage() {
           value={form.cityId}
           onChange={e => setForm({ ...form, cityId: e.target.value })}
           className="w-full p-2 border rounded"
-          required
+          // required // Custom toast handles validation
         >
           <option value="">Select City</option>
           {cities.map(c => (

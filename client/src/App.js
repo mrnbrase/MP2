@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { Toaster } from 'react-hot-toast'; // Import Toaster
 import ProtectedRoute from './components/ProtectedRoute';
 
 import LoginPage        from './pages/LoginPage';
 import SignupPage       from './pages/SignupPage';
 import CountrySelect    from './pages/CountrySelect';
 import ElectionPage     from './pages/ElectionPage';
+import DiplomacyPage    from './pages/DiplomacyPage'; // Import DiplomacyPage
 import AdminPage        from './pages/AdminPage';
 import Header           from './components/Header';
 import StatsPage        from './pages/StatsPage';
@@ -20,6 +22,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Toaster position="top-right" /> {/* Add Toaster */}
         <Header />
         <Routes>
           <Route path="/login"           element={<LoginPage />} />
@@ -41,6 +44,7 @@ function App() {
           </Route>
 
           <Route path="/admin"           element={<ProtectedRoute><AdminPage/></ProtectedRoute>} />
+          <Route path="/diplomacy"      element={<ProtectedRoute><DiplomacyPage/></ProtectedRoute>} /> {/* Add Diplomacy Route */}
 
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
